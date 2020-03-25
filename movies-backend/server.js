@@ -78,7 +78,7 @@ app.get("/movie/:id", async (req, res, next) => {
     const [movie, cast, similarMovies] = await Promise.all([
         getMovie(req.params.id),
         getMovieCredits(req.params.id).then(response => response.cast),
-        getSimilarMovies(req.params.id).then(response => response),
+        getSimilarMovies(req.params.id).then(response => response.results),
     ]);
     const response = { ...movie, cast, similarMovies };
     res.json(response);
