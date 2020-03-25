@@ -8,10 +8,10 @@
     </div>
     <h2>Cast</h2>
     <div v-for="castMember in movie.cast" :key="castMember.id"><router-link :to="`/person/${castMember.id}`"><strong>{{castMember.character ? castMember.character : 'Unknown'}}</strong> - {{castMember.name}}</router-link></div>
-    <div v-if="movie.cast.length === 0">Cast Not Found</div>
+    <div v-if="!movie.cast || movie.cast.length === 0">Cast Not Found</div>
     <h2>Similar Movies</h2>
     <div v-for="movie in movie.similarMovies" :key="movie.id"><router-link :to="`/movie/${movie.id}`">{{movie.title}}</router-link></div>
-    <div v-if="movie.similarMovies.length === 0">No Similar Movies Found</div>
+    <div v-if="!movie.similarMovies || movie.similarMovies.length === 0">No Similar Movies Found</div>
   </div>
 </template>
 

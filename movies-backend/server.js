@@ -5,9 +5,9 @@ var fetch = require('node-fetch');
 var app = express();
 app.use(apicache.middleware('1 day'));
 
-const getPopularMovies = async () => {
+const getPopularMovies = async (page) => {
     try {
-      const response = await fetch('https://api.themoviedb.org/3/movie/popular?api_key=d3d179c1693200b240827f767bf6e1db');
+      const response = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=d3d179c1693200b240827f767bf6e1db&page=${page}`);
       const json = await response.json();
       return json;
     } catch (error) {
@@ -66,7 +66,8 @@ const getPerson = async (id) => {
 };
 
 app.get("/movie/popular", async (req, res, next) => {
-    res.json(await getPopularMovies());
+    const page = req.query.page || 1;
+    res.json(await getPopularMovies(page));
 });
 
 app.get("/search/movie", async (req, res, next) => {
@@ -77,7 +78,7 @@ app.get("/movie/:id", async (req, res, next) => {
     const [movie, cast, similarMovies] = await Promise.all([
         getMovie(req.params.id),
         getMovieCredits(req.params.id).then(response => response.cast),
-        getSimilarMovies(req.params.id).then(response => response.results),
+        getSimilarMovies(req.params.id).then(response => response),
     ]);
     const response = { ...movie, cast, similarMovies };
     res.json(response);
